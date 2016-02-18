@@ -229,15 +229,19 @@ public class Router {
         self.routeMap.removeAllObjects()
     }
     
-    public func routeURL(route:String) {
+    public func routeURL(route:String) -> Bool {
         if let handler = self.matchHandler(route) {
             let params = self.paramsInRoute(route)
-            handler(params)
+            return handler(params)
         }
+        return false
     }
-    public func routeURL(route:String, navigationController: UINavigationController) {
+    
+    public func routeURL(route:String, navigationController: UINavigationController) -> Bool {
         if let vc = self.matchController(route) {
             navigationController.pushViewController(vc as! UIViewController, animated: true)
+            return true
         }
+        return false
     }
 }
