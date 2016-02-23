@@ -185,7 +185,8 @@ public class Router {
                     subRoutes = subRoutes[s] as! NSMutableDictionary
                     break
                 } else {
-                    fatalError(RouterError.SchemeNotRecognized.message())
+                    print(RouterError.SchemeNotRecognized.message())
+                    return nil
                 }
             }
         }
@@ -236,7 +237,7 @@ public class Router {
         }
         return false
     }
-    
+
     public func routeURL(route:String, navigationController: UINavigationController) -> Bool {
         if let vc = self.matchController(route) {
             navigationController.pushViewController(vc as! UIViewController, animated: true)

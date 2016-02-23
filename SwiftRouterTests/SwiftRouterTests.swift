@@ -61,7 +61,11 @@ class SwiftRouterTests: XCTestCase {
         let handler = router.matchHandler("/user/add")
         XCTAssertNotNil(handler)
         
-        router.routeURL("/user/add?username=hello&password=123")
+        let success = router.routeURL("/user/add?username=hello&password=123")
+        XCTAssertTrue(success)
+        
+        let failed = router.routeURL("/unknown")
+        XCTAssertFalse(failed)
     }
     
     func testRemoveAllHandlers() {
