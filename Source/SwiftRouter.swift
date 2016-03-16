@@ -238,9 +238,6 @@ public class Router {
         }
         var result = [String]()
         for pathComponent in path.pathComponents {
-            if pathComponent == "/" {
-                continue
-            }
             result.append(pathComponent)
         }
         return result
