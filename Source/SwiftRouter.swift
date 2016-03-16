@@ -197,22 +197,42 @@ public class Router {
 
         var params = [String:String]()
         self.findRouteEntry(route.stringByFilterAppSchemes(), params: &params)
-        
-        if let loc = route.rangeOfString("?") {
-            let paramsString = route.substringFromIndex(loc.startIndex.advancedBy(1))
-            let paramArray = paramsString.componentsSeparatedByString("&")
-            for param in paramArray {
-                let kv = param.componentsSeparatedByString("=")
-                let k = kv[0]
-                let v = kv[1]
-                params[k] = v
+
+        var path = route
+
+        if let loc = path.rangeOfString("#") {
+            for (key, value) in paramsFromQuery(path.substringFromIndex(loc.startIndex.advancedBy(1))) {
+                params[key] = value
             }
+            path = path.substringToIndex(loc.startIndex)
+        }
+
+        if let loc = path.rangeOfString("?") {
+            for (key, value) in paramsFromQuery(path.substringFromIndex(loc.startIndex.advancedBy(1))) {
+                params[key] = value
+            }
+        }
+
+        return params
+    }
+
+    private func paramsFromQuery(query: String) -> [String:String] {
+        var params = [String:String]()
+        let paramArray = query.componentsSeparatedByString("&")
+        for param in paramArray {
+            let kv = param.componentsSeparatedByString("=")
+            let k = kv[0]
+            let v = kv[1]
+            params[k] = v
         }
         return params
     }
     
     func pathComponentsInRoute(route: String) -> [String] {
         var path:NSString = NSString(string: route)
+        if let loc = route.rangeOfString("#") {
+            path = NSString(string: route.substringToIndex(loc.startIndex))
+        }
         if let loc = route.rangeOfString("?") {
             path = NSString(string: route.substringToIndex(loc.startIndex))
         }

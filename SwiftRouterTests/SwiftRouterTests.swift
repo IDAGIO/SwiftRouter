@@ -38,6 +38,11 @@ class SwiftRouterTests: XCTestCase {
         XCTAssertEqual(vc.username, "hello")
         XCTAssertEqual(vc.password, "123")
         
+        let vc2 = router.matchController("/user/1?password=234#username=hello&password=123") as! UserViewController
+        XCTAssertEqual(vc2.userId, "1")
+        XCTAssertEqual(vc2.username, "hello")
+        XCTAssertEqual(vc2.password, "234") // overwritten by querystring
+        
         let storyboardController = router.matchControllerFromStoryboard("/anotherScreenFromStoryboard/1010", storyboardName: "MyStoryboard") as! StoryboardViewController
         XCTAssertEqual(storyboardController.identifier, "1010")
         // Test user defined runtime attribute value (set in storyboard)
