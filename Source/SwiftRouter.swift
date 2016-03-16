@@ -237,7 +237,10 @@ public class Router {
             path = NSString(string: route.substringToIndex(loc.startIndex))
         }
         var result = [String]()
-        for pathComponent in path.pathComponents {
+        for (index, pathComponent) in path.pathComponents.enumerate() {
+            if index > 0 && pathComponent == "/" { // don't ignore the leading `/` in order to support root matching
+                continue
+            }
             result.append(pathComponent)
         }
         return result

@@ -30,6 +30,7 @@ class SwiftRouterTests: XCTestCase {
         
         XCTAssertTrue(router.matchController("/")!.isKindOfClass(AboutViewController.self))
         XCTAssertTrue(router.matchController("/about")!.isKindOfClass(AboutViewController.self))
+        XCTAssertTrue(router.matchController("/user/1/?username=hello")!.isKindOfClass(UserViewController.self))
         XCTAssertTrue(router.matchController("/user/1")!.isKindOfClass( UserViewController.self))
         XCTAssertTrue(router.matchController("/story/2")!.isKindOfClass( StoryViewController.self))
         XCTAssertTrue(router.matchController("/user/2/story")!.isKindOfClass( StoryListViewController.self))
