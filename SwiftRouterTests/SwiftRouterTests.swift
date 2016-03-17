@@ -31,6 +31,7 @@ class SwiftRouterTests: XCTestCase {
         XCTAssertTrue(router.matchController("/")!.isKindOfClass(AboutViewController.self))
         XCTAssertTrue(router.matchController("/about")!.isKindOfClass(AboutViewController.self))
         XCTAssertTrue(router.matchController("/user/1/?username=hello")!.isKindOfClass(UserViewController.self))
+        XCTAssertTrue(router.matchController("/user/1/?username=hello&foo")!.isKindOfClass(UserViewController.self))
         XCTAssertTrue(router.matchController("/user/1")!.isKindOfClass( UserViewController.self))
         XCTAssertTrue(router.matchController("/story/2")!.isKindOfClass( StoryViewController.self))
         XCTAssertTrue(router.matchController("/user/2/story")!.isKindOfClass( StoryListViewController.self))
@@ -41,7 +42,7 @@ class SwiftRouterTests: XCTestCase {
         XCTAssertEqual(vc.username, "hello")
         XCTAssertEqual(vc.password, "123")
         
-        let vc2 = router.matchController("/user/1?password=234#username=hello&password=123") as! UserViewController
+        let vc2 = router.matchController("/user/1?password=234#username=hello&password=123&foo") as! UserViewController
         XCTAssertEqual(vc2.userId, "1")
         XCTAssertEqual(vc2.username, "hello")
         XCTAssertEqual(vc2.password, "234") // overwritten by querystring

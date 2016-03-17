@@ -221,9 +221,11 @@ public class Router {
         let paramArray = query.componentsSeparatedByString("&")
         for param in paramArray {
             let kv = param.componentsSeparatedByString("=")
-            let k = kv[0]
-            let v = kv[1]
-            params[k] = v
+            if kv.count >= 2 {
+                let k = kv[0]
+                let v = kv[1]
+                params[k] = v
+            }
         }
         return params
     }
