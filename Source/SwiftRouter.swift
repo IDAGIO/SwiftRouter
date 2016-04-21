@@ -167,7 +167,7 @@ public class Router {
     }
 
     private func findRouteEntry(route: String, inout params:[String:String]) -> RouteEntry? {
-        let pathComponents = self.pathComponentsInRoute(route)
+        let pathComponents = self.pathComponentsInRoute(route.stringByFilterAppSchemes())
 
         var subRoutes = self.routeMap
         for pathComponent in pathComponents {
