@@ -92,7 +92,7 @@ public class Router {
 
     private let kRouteEntryKey = "_entry"
 
-    private var routeMap = NSMutableDictionary()
+    private var routeMap:[String: AnyObject] = [:]
 
     public func map(route: String, controllerClass: AnyClass) {
         self.doMap(route, cls: controllerClass)
@@ -110,25 +110,28 @@ public class Router {
             r = RouteEntry(pattern: route, handler: handler)
         }
         let pathComponents = self.pathComponentsInRoute(route)
-        self.insertRoute(pathComponents, entry: r, subRoutes: self.routeMap)
+        self.routeMap = self.insertRoute(pathComponents, oldMap: self.routeMap, entry: r)
     }
 
-    private func insertRoute(pathComponents: [String], entry: RouteEntry, subRoutes: NSMutableDictionary, index: Int = 0){
+    private func insertRoute(pathComponents: [String], oldMap: [String: AnyObject]?, entry: RouteEntry, index: Int = 0) -> [String: AnyObject] {
 
+        var newMap: [String: AnyObject] = oldMap ?? [:]
         if index >= pathComponents.count {
             fatalError(RouterError.EntryAlreayExisted.description)
         }
         let pathComponent = pathComponents[index]
-        if subRoutes[pathComponent] == nil {
+        if newMap[pathComponent] == nil {
             if pathComponent == pathComponents.last {
-                subRoutes[pathComponent] = NSMutableDictionary(dictionary: [kRouteEntryKey: entry])
+                newMap[pathComponent] = [kRouteEntryKey: entry]
                 print("Adding Route: \(entry.description)")
-                return
+                return newMap
             }
-            subRoutes[pathComponent] = NSMutableDictionary()
         }
+
         // recursive
-        self.insertRoute(pathComponents, entry: entry, subRoutes: subRoutes[pathComponent] as! NSMutableDictionary, index: index+1)
+        newMap[pathComponent] = self.insertRoute(pathComponents, oldMap: newMap[pathComponent] as? [String: AnyObject], entry: entry, index: index+1)
+
+        return newMap
     }
 
 
@@ -175,11 +178,11 @@ public class Router {
                 // match handler first
                 if subRoutes[pathComponent] != nil {
                     if pathComponent == pathComponents.last {
-                        let d = subRoutes[pathComponent] as! NSMutableDictionary
+                        let d = subRoutes[pathComponent] as! [String: AnyObject]
                         let entry = d["_entry"] as! RouteEntry
                         return entry
                     }
-                    subRoutes = subRoutes[pathComponent] as! NSMutableDictionary
+                    subRoutes = subRoutes[pathComponent] as! [String: AnyObject]
                     break
                 }
                 if k.hasPrefix(":") {
@@ -189,14 +192,12 @@ public class Router {
                     if pathComponent == pathComponents.last {
                         return v[kRouteEntryKey] as? RouteEntry
                     }
-                    subRoutes = subRoutes[s] as! NSMutableDictionary
+                    subRoutes = subRoutes[s] as! [String: AnyObject]
                     break
-                } else {
-                    print(RouterError.SchemeNotRecognized.description)
-                    return nil
                 }
             }
         }
+        print(RouterError.SchemeNotRecognized.description)
         return nil
     }
 
@@ -256,7 +257,7 @@ public class Router {
     }
 
     public func removeAllRoutes() {
-        self.routeMap.removeAllObjects()
+        self.routeMap.removeAll()
     }
 
     public func routeURL(route:String) -> Bool {
