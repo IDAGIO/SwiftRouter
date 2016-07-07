@@ -76,6 +76,40 @@ extension RouteEntry: CustomStringConvertible, CustomDebugStringConvertible {
     }
 }
 
+struct Regex {
+    var pattern: String {
+        didSet {
+            updateRegex()
+        }
+    }
+    var expressionOptions: NSRegularExpressionOptions {
+        didSet {
+            updateRegex()
+        }
+    }
+    var matchingOptions: NSMatchingOptions
+
+    var regex: NSRegularExpression?
+
+    init(pattern: String, expressionOptions: NSRegularExpressionOptions, matchingOptions: NSMatchingOptions) {
+        self.pattern = pattern
+        self.expressionOptions = expressionOptions
+        self.matchingOptions = matchingOptions
+        updateRegex()
+    }
+
+    init(pattern: String) {
+        self.pattern = pattern
+        expressionOptions = NSRegularExpressionOptions(rawValue: 0)
+        matchingOptions = NSMatchingOptions(rawValue: 0)
+        updateRegex()
+    }
+
+    mutating func updateRegex() {
+        regex = try! NSRegularExpression(pattern: pattern, options: expressionOptions)
+    }
+}
+
 extension String {
     func stringByFilterAppSchemes() -> String {
         for scheme in appUrlSchemes {
@@ -84,6 +118,33 @@ extension String {
             }
         }
         return self
+    }
+
+    func matchRegex(pattern: Regex) -> Bool {
+        let range: NSRange = NSMakeRange(0, self.characters.count)
+        if pattern.regex != nil {
+            let matches: [AnyObject] = pattern.regex!.matchesInString(self, options: pattern.matchingOptions, range: range)
+            return matches.count > 0
+        }
+        return false
+    }
+
+    func match(patternString: String) -> Bool {
+        return self.matchRegex(Regex(pattern: patternString))
+    }
+
+    func replaceRegex(pattern: Regex, template: String) -> String {
+        if self.matchRegex(pattern) {
+            let range: NSRange = NSMakeRange(0, self.characters.count)
+            if pattern.regex != nil {
+                return pattern.regex!.stringByReplacingMatchesInString(self, options: pattern.matchingOptions, range: range, withTemplate: template)
+            }
+        }
+        return self
+    }
+
+    func replace(pattern: String, template: String) -> String {
+        return self.replaceRegex(Regex(pattern: pattern), template: template)
     }
 }
 
@@ -226,7 +287,7 @@ public class Router {
 
     private func paramsFromQuery(query: String) -> [String:String] {
         var params = [String:String]()
-        let paramArray = query.componentsSeparatedByString("&")
+        let paramArray = query.componentsSeparatedByString("?").joinWithSeparator("&").componentsSeparatedByString("&")
         for param in paramArray {
             let kv = param.componentsSeparatedByString("=")
             if kv.count >= 2 {
@@ -239,13 +300,7 @@ public class Router {
     }
 
     private func pathComponentsInRoute(route: String) -> [String] {
-        var path:NSString = NSString(string: route)
-        if let loc = route.rangeOfString("#") {
-            path = NSString(string: route.substringToIndex(loc.startIndex))
-        }
-        if let loc = route.rangeOfString("?") {
-            path = NSString(string: route.substringToIndex(loc.startIndex))
-        }
+        let path = NSString(string: route.replaceRegex(Regex(pattern: "(#|\\?).*"), template: ""))
         var result = [String]()
         for (index, pathComponent) in path.pathComponents.enumerate() {
             if index > 0 && pathComponent == "/" { // don't ignore the leading `/` in order to support root matching
