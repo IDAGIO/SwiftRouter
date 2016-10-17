@@ -183,9 +183,6 @@ open class Router {
                     }
                     subRoutes = subRoutes[s] as! NSMutableDictionary
                     break
-                } else {
-                    print(RouterError.schemeNotRecognized.message())
-                    return nil
                 }
             }
         }
@@ -195,7 +192,7 @@ open class Router {
     func paramsInRoute(_ route: String) -> [String: String] {
 
         var params = [String:String]()
-        self.findRouteEntry(route.stringByFilterAppSchemes(), params: &params)
+        _ = self.findRouteEntry(route.stringByFilterAppSchemes(), params: &params)
 
         var path = route
 

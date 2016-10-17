@@ -17,6 +17,7 @@
 		2D76133F1BB415CC0091035E /* SwiftRouter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D7613341BB415CC0091035E /* SwiftRouter.framework */; };
 		2D7613441BB415CC0091035E /* SwiftRouterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D7613431BB415CC0091035E /* SwiftRouterTests.swift */; };
 		2DBE52431BB4169900F9CE5A /* SwiftRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DBE52421BB4169900F9CE5A /* SwiftRouter.swift */; };
+		496281571DB4CCCC00FA55AC /* CatchAllViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 496281561DB4CCCC00FA55AC /* CatchAllViewController.swift */; };
 		74A5954A1BF0BA4200FE14FC /* AboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74A595491BF0BA4200FE14FC /* AboutViewController.swift */; };
 /* End PBXBuildFile section */
 
@@ -44,6 +45,7 @@
 		2D7613431BB415CC0091035E /* SwiftRouterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftRouterTests.swift; sourceTree = "<group>"; };
 		2D7613451BB415CC0091035E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2DBE52421BB4169900F9CE5A /* SwiftRouter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SwiftRouter.swift; path = Source/SwiftRouter.swift; sourceTree = SOURCE_ROOT; };
+		496281561DB4CCCC00FA55AC /* CatchAllViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CatchAllViewController.swift; sourceTree = "<group>"; };
 		74A595491BF0BA4200FE14FC /* AboutViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -106,6 +108,7 @@
 				296CFB391BCBDA3A00F7E57A /* MyStoryboard.storyboard */,
 				296CFB3D1BCBDF3100F7E57A /* Storyboard.storyboard */,
 				2D7613451BB415CC0091035E /* Info.plist */,
+				496281561DB4CCCC00FA55AC /* CatchAllViewController.swift */,
 			);
 			path = SwiftRouterTests;
 			sourceTree = "<group>";
@@ -233,6 +236,7 @@
 				74A5954A1BF0BA4200FE14FC /* AboutViewController.swift in Sources */,
 				2D3E09D71BB4D79100311B23 /* StoryViewController.swift in Sources */,
 				2D3E09D81BB4D79100311B23 /* UserViewController.swift in Sources */,
+				496281571DB4CCCC00FA55AC /* CatchAllViewController.swift in Sources */,
 				296CFB3C1BCBDA5400F7E57A /* StoryboardViewController.swift in Sources */,
 				2D3E09D61BB4D79100311B23 /* StoryListViewController.swift in Sources */,
 				2D7613441BB415CC0091035E /* SwiftRouterTests.swift in Sources */,

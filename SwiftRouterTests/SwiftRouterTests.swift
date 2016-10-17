@@ -27,7 +27,8 @@ class SwiftRouterTests: XCTestCase {
         router.map("/user/:userId/story", controllerClass: StoryListViewController.self)
 
         router.map("/anotherScreenFromStoryboard/:identifier", controllerClass: StoryboardViewController.self)
-        
+        router.map("/:identifier", controllerClass: CatchAllViewController.self)
+
         XCTAssertTrue(router.matchController("/")!.isKind(of: AboutViewController.self))
         XCTAssertTrue(router.matchController("/about")!.isKind(of: AboutViewController.self))
         XCTAssertTrue(router.matchController("/user/1/?username=hello")!.isKind(of: UserViewController.self))
@@ -36,7 +37,8 @@ class SwiftRouterTests: XCTestCase {
         XCTAssertTrue(router.matchController("/story/2")!.isKind( of: StoryViewController.self))
         XCTAssertTrue(router.matchController("/user/2/story")!.isKind( of: StoryListViewController.self))
         XCTAssertTrue(router.matchController("/anotherScreenFromStoryboard/1010")!.isKind( of: StoryboardViewController.self))
-        
+        XCTAssertTrue(router.matchController("/foo")!.isKind( of: CatchAllViewController.self))
+
         let vc = router.matchController("/user/1?username=hello&password=123") as! UserViewController
         XCTAssertEqual(vc.userId, "1")
         XCTAssertEqual(vc.username, "hello")
@@ -46,7 +48,10 @@ class SwiftRouterTests: XCTestCase {
         XCTAssertEqual(vc2.userId, "1")
         XCTAssertEqual(vc2.username, "hello")
         XCTAssertEqual(vc2.password, "234") // overwritten by querystring
-        
+
+        let vc3 = router.matchController("/testId") as! CatchAllViewController
+        XCTAssertEqual(vc3.identifier, "testId")
+
         let storyboardController = router.matchControllerFromStoryboard("/anotherScreenFromStoryboard/1010", storyboardName: "MyStoryboard") as! StoryboardViewController
         XCTAssertEqual(storyboardController.identifier, "1010")
         // Test user defined runtime attribute value (set in storyboard)
