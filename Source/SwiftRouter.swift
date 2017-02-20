@@ -73,7 +73,7 @@ extension String {
     func stringByFilterAppSchemes() -> String {
         for scheme in appUrlSchemes {
             if self.hasPrefix(scheme + ":") {
-                return self.substring(from: self.characters.index(self.startIndex, offsetBy: (scheme.characters.count + 2)))
+                return self.substring(from: self.characters.index(self.startIndex, offsetBy: (scheme.characters.count + 1)))
             }
         }
         return self
